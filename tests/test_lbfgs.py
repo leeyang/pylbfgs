@@ -7,7 +7,9 @@ import numpy as np
 
 def test_fmin_lbfgs():
     def f(x, g, *args):
-        g[0] = 2 * x
+        g = [2 * x]
+        for (i, e) in enumerate(res):
+            g[i] = e;
         return x ** 2
 
     xmin = fmin_lbfgs(f, 100., line_search='armijo')

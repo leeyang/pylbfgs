@@ -410,7 +410,8 @@ cdef class LBFGS(object):
             elif r == LBFGSERR_OUTOFMEMORY:
                 raise MemoryError
             else:
-                raise LBFGSError(_ERROR_MESSAGES[r])
+                return x_array.reshape(x0.shape)
+                #raise LBFGSError(_ERROR_MESSAGES[r])
 
         finally:
             lbfgs_free(x_a)

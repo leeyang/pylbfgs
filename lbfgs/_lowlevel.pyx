@@ -401,7 +401,7 @@ cdef class LBFGS(object):
                                                        <void *>x_a).copy()
 
                 return x_array.reshape(x0.shape)
-            elif r in (LBFGSERR_ROUNDING_ERROR, LBFGSERR_MAXIMUMLINESEARCH) :
+            elif r in (LBFGSERR_ROUNDING_ERROR, LBFGSERR_MAXIMUMLINESEARCH, LBFGSERR_MAXIMUMITERATION) :
                 warnings.warn(_ERROR_MESSAGES[r])
                 x_array = np.PyArray_SimpleNewFromData(1, tshape, np.NPY_DOUBLE,
                                                        <void *>x_a).copy()
@@ -410,9 +410,11 @@ cdef class LBFGS(object):
             elif r == LBFGSERR_OUTOFMEMORY:
                 raise MemoryError
             else:
-                pass
-                #return x_array.reshape(x0.shape)
-                #raise LBFGSError(_ERROR_MESSAGES[r])
+                warnings.warn(_ERROR_MESSAGES[r])
+                x_array = np.PyArray_SimpleNewFromData(1, tshape, np.NPY_DOUBLE,
+                                                       <void *>x_a).copy()
+
+                return x_array.reshape(x0.shape)
 
         finally:
             lbfgs_free(x_a)
